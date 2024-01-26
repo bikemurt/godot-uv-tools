@@ -10,6 +10,9 @@ func _ready():
 	_load_mesh()
 
 func _load_mesh():
+	if not Engine.is_editor_hint():
+		return
+	
 	var new_mesh = ArrayMesh.new()
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, BoxMesh.new().get_mesh_arrays())
 	
@@ -98,7 +101,8 @@ func _load_mesh():
 
 var last_scale = scale
 func _process(delta):
-	if last_scale != scale:
-		if auto_update:
-			_load_mesh()
-	last_scale = scale
+	if Engine.is_editor_hint():
+		if last_scale != scale:
+			if auto_update:
+				_load_mesh()
+		last_scale = scale
