@@ -4,10 +4,10 @@
  
 **Simple Godot 4 plugin to that includes various tools to manipulate UVs.**
 - *ProtoCube* node. Automatically performs a cube projection so that prototyping textures scale:
-![image](https://github.com/bikemurt/godot-uv-tools/assets/23486102/5dc7a270-d7cf-436e-aa58-a75b9873a0f9)
-![image](https://github.com/bikemurt/godot-uv-tools/assets/23486102/acaa1c51-915a-41eb-a274-399ee759f440)
+![image](https://github.com/bikemurt/godot-uv-tools/assets/23486102/9b9f14d1-e9de-4c05-b917-7105059c9616)
 
-As the name suggests, this is useful for prototyping.
+After scaling on the x axis, notice that the texture repeats and does not stretch:
+![image](https://github.com/bikemurt/godot-uv-tools/assets/23486102/8ca0c3bd-0a8c-44c2-b8f3-71f3aab10ead)
 
 ---
 
