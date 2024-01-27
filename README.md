@@ -1,6 +1,8 @@
 <img src="icon.png" width="64" align="left" />
 
 ## godot-uv-tools
+
+[Youtube video](https://www.youtube.com/watch?v=Igqqg7R-4sA)
  
 **Simple Godot 4 plugin to that includes various tools to manipulate UVs.**
 - *ProtoCube* node. Automatically performs a cube projection so that prototyping textures scale:
