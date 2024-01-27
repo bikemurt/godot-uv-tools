@@ -1,3 +1,5 @@
+<img src="icon.png" width="64" align="left" />
+
 ## godot-uv-tools
  
 **Simple Godot 4 plugin to that includes various tools to manipulate UVs.**
