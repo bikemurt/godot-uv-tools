@@ -11,6 +11,11 @@
 After scaling on the x axis, notice that the texture repeats and does not stretch:
 ![image](https://github.com/bikemurt/godot-uv-tools/assets/23486102/8ca0c3bd-0a8c-44c2-b8f3-71f3aab10ead)
 
+- *ProtoBody* node. Basically the same as ProtoCube but wraps with a Rigid/StaticBody3D and collision shape.
+- Quick texture selection for the purposes of prototyping:
+- ![image](https://github.com/bikemurt/godot-uv-tools/assets/23486102/cacb6cfe-6219-464c-b655-e3c44624ab5d)
+
+
 ---
 
 **Godot Versions Tested**
