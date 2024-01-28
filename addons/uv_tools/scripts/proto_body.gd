@@ -55,7 +55,7 @@ func _update_texture():
 	mesh_instance.set_surface_override_material(0, mat)
 
 func _update_uv():
-	return uv_tools.cube_project(mesh_instance, Vector3(1,1,1))
+	return uv_tools.cube_project(mesh_instance)
 
 func _update_size():
 	if mesh_instance == null: return

@@ -1,5 +1,14 @@
 @tool
-extends MeshInstance3D
+extends Node3D
+
+## Size of the box mesh and box collision shape
+@export var size := Vector3(1,1,1):
+	set(value):
+		size = value
+		if auto_reload:
+			_update_size()
+	get:
+		return size
 
 ## Texture to be used for the albedo of the box's surface material
 @export var albedo_texture : Texture2D:
@@ -19,132 +28,66 @@ extends MeshInstance3D
 	set(value):
 		_load()
 
-var uv_tools = preload("res://addons/uv_tools/scripts/uv_tools.gd").new()
-
+var top_node
+var mesh_instance : MeshInstance3D
 var mat : StandardMaterial3D
 
+var uv_tools = preload("res://addons/uv_tools/scripts/uv_tools.gd").new()
+
+# Called when the node enters the scene tree for the first time.
 func _ready():
 	_load()
 
 func _update_texture():
+	if mesh_instance == null: return
+	
 	mat.albedo_texture = albedo_texture
-	set_surface_override_material(0, mat)
+	mesh_instance.set_surface_override_material(0, mat)
 
-func _update_UV():
+func _update_uv():
+	return uv_tools.cube_project(mesh_instance)
+
+func _update_size():
+	if mesh_instance == null: return
+	
 	var box_mesh = BoxMesh.new()
-	mesh = box_mesh
+	box_mesh.size = size
+	mesh_instance.mesh = box_mesh
 	
-	var new_mesh_instance : MeshInstance3D = uv_tools.cube_project(self, scale)
-	
-	mesh = new_mesh_instance.mesh
-	
-	var mat = new_mesh_instance.get_surface_override_material(0)
-	set_surface_override_material(0, mat)
+	mesh_instance = _update_uv()
 
 func _load():
+	if not Engine.is_editor_hint(): return
+	
+	print("Loading ProtoBody")
+	
+	var delete = []
+	for child in get_children():
+		delete.append(child)
+		
+	for node in delete:
+		remove_child(node)
+	
+	mesh_instance = MeshInstance3D.new()
+	mesh_instance.name = "MeshInstance3D"
+	
+	var box_mesh = BoxMesh.new()
+	box_mesh.size = size
+	
+	mesh_instance.mesh = box_mesh
+	
 	mat = StandardMaterial3D.new()
 	
 	if albedo_texture != null:
 		mat.albedo_texture = albedo_texture
 	
-	set_surface_override_material(0, mat)
+	mesh_instance.set_surface_override_material(0, mat)
 	
-	_update_UV()
+	add_child(mesh_instance)
+	
+	mesh_instance = _update_uv()
+	
+	mesh_instance.owner = get_tree().edited_scene_root
 
-func _load_mesh():
-	if not Engine.is_editor_hint():
-		return
-	
-	var new_mesh = ArrayMesh.new()
-	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, BoxMesh.new().get_mesh_arrays())
-	
-	var mdt = MeshDataTool.new()
-	mdt.create_from_surface(new_mesh, 0)
-	
-	for i in range(mdt.get_face_count()):
-		var normal = mdt.get_face_normal(i)
-		
-		var idx_0 = mdt.get_face_vertex(i, 0)
-		var idx_1 = mdt.get_face_vertex(i, 1)
-		var idx_2 = mdt.get_face_vertex(i, 2)
-		
-		var v0 = mdt.get_vertex(idx_0)
-		var v1 = mdt.get_vertex(idx_1)
-		var v2 = mdt.get_vertex(idx_2)
-		
-		if normal.x != 0:
-			# use y and z
-			var p0 = Vector2(v0.y, v0.z)
-			var p1 = Vector2(v1.y, v1.z)
-			var p2 = Vector2(v2.y, v2.z)
-			
-			var scale_uv = Vector2(scale.y, scale.z)
-			
-			p0 *= scale_uv
-			p1 *= scale_uv
-			p2 *= scale_uv
-			
-			var uv0 = Vector2(p0.x + 0.5, p0.y + 0.5)
-			var uv1 = Vector2(p1.x + 0.5, p1.y + 0.5)
-			var uv2 = Vector2(p2.x + 0.5, p2.y + 0.5)
-			
-			mdt.set_vertex_uv(idx_0, uv0)
-			mdt.set_vertex_uv(idx_1, uv1)
-			mdt.set_vertex_uv(idx_2, uv2)
-		
-		if normal.y != 0:
-			# use x and z
-			var p0 = Vector2(v0.x, v0.z)
-			var p1 = Vector2(v1.x, v1.z)
-			var p2 = Vector2(v2.x, v2.z)
-			
-			var scale_uv = Vector2(scale.x, scale.z)
-			
-			p0 *= scale_uv
-			p1 *= scale_uv
-			p2 *= scale_uv
-			
-			var uv0 = Vector2(p0.x + 0.5, p0.y + 0.5)
-			var uv1 = Vector2(p1.x + 0.5, p1.y + 0.5)
-			var uv2 = Vector2(p2.x + 0.5, p2.y + 0.5)
-			
-			mdt.set_vertex_uv(idx_0, uv0)
-			mdt.set_vertex_uv(idx_1, uv1)
-			mdt.set_vertex_uv(idx_2, uv2)
-			
-		if normal.z != 0:
-			# use x and y
-			var p0 = Vector2(v0.x, v0.y)
-			var p1 = Vector2(v1.x, v1.y)
-			var p2 = Vector2(v2.x, v2.y)
-			
-			var scale_uv = Vector2(scale.x, scale.y)
-			
-			p0 *= scale_uv
-			p1 *= scale_uv
-			p2 *= scale_uv
-			
-			var uv0 = Vector2(p0.x + 0.5, p0.y + 0.5)
-			var uv1 = Vector2(p1.x + 0.5, p1.y + 0.5)
-			var uv2 = Vector2(p2.x + 0.5, p2.y + 0.5)
-			
-			mdt.set_vertex_uv(idx_0, uv0)
-			mdt.set_vertex_uv(idx_1, uv1)
-			mdt.set_vertex_uv(idx_2, uv2)
-	
-	new_mesh.clear_surfaces()
-	mdt.commit_to_surface(new_mesh)
-	
-	mesh = new_mesh
-	
-	if get_surface_override_material(0) == null:
-		var mat = StandardMaterial3D.new()
-		set_surface_override_material(0, mat)
-
-var last_scale = scale
 func _process(delta):
-	if Engine.is_editor_hint():
-		if last_scale != scale:
-			if auto_reload:
-				_update_UV()
-		last_scale = scale
+	pass

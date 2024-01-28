@@ -10,7 +10,7 @@ func _process(delta):
 	pass
 
 
-func cube_project(mesh_instance : MeshInstance3D, node_scale : Vector3):
+func cube_project(mesh_instance : MeshInstance3D, node_scale := Vector3(1,1,1)):
 	if not Engine.is_editor_hint():
 		return
 	
