@@ -1,13 +1,55 @@
 @tool
 extends MeshInstance3D
 
-@export var auto_update = true
+## Texture to be used for the albedo of the box's surface material
+@export var albedo_texture : Texture2D:
+	set(value):
+		albedo_texture = value
+		if auto_reload:
+			_update_texture()
+	get:
+		return albedo_texture
+
+@export_group("Editor Settings")
+## Automatically reload the proto node as parameters change
+@export var auto_reload = true
+
+## Only reload manually by toggling this export
 @export var manual_reload = false:
 	set(value):
-		_load_mesh()
+		_load()
+
+var uv_tools = preload("res://addons/uv_tools/scripts/uv_tools.gd").new()
+
+var mat : StandardMaterial3D
 
 func _ready():
-	_load_mesh()
+	_load()
+
+func _update_texture():
+	mat.albedo_texture = albedo_texture
+	set_surface_override_material(0, mat)
+
+func _update_UV():
+	var box_mesh = BoxMesh.new()
+	mesh = box_mesh
+	
+	var new_mesh_instance : MeshInstance3D = uv_tools.cube_project(self, scale)
+	
+	mesh = new_mesh_instance.mesh
+	
+	var mat = new_mesh_instance.get_surface_override_material(0)
+	set_surface_override_material(0, mat)
+
+func _load():
+	mat = StandardMaterial3D.new()
+	
+	if albedo_texture != null:
+		mat.albedo_texture = albedo_texture
+	
+	set_surface_override_material(0, mat)
+	
+	_update_UV()
 
 func _load_mesh():
 	if not Engine.is_editor_hint():
@@ -103,6 +145,6 @@ var last_scale = scale
 func _process(delta):
 	if Engine.is_editor_hint():
 		if last_scale != scale:
-			if auto_update:
-				_load_mesh()
+			if auto_reload:
+				_update_UV()
 		last_scale = scale
