@@ -25,7 +25,7 @@ After scaling on the x axis, notice that the texture repeats and does not stretc
 ---
 ## 🚀 Install & Use
 
-1. Download this [repository](https://github.com/bikemurt/godot-uv-tools/), or download from the Godot Asset Library (not yet approved)
+1. Download this [repository](https://github.com/bikemurt/godot-uv-tools/), or download from the [Godot Asset Library](https://godotengine.org/asset-library/asset/2544)
     - Import the addons folder into your project (if it already isn't present).
 2. Activate the UV Tools addon under Project > Project Settings > Plugins. If an error dialog appears, restart the engine and try activating it again.
 3. Add a "ProtoCube" node to your scene. Drop a texture onto the Albedo of the material override, and then scale the cube. You should see the cube projection update so that the texture tiles.
