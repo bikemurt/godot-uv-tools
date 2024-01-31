@@ -1,4 +1,4 @@
-<img src="icon.png" width="64" align="left" />
+<img src="addons/uv_tools/icon.png" width="64" align="left" />
 
 ## godot-uv-tools
 
