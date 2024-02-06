@@ -122,8 +122,7 @@ func _load():
 	
 	var set_roots = [top_node, collision_shape, mesh_instance]
 	for node in set_roots:
-		if node.owner:
-			node.owner = get_tree().edited_scene_root
+		node.owner = get_tree().edited_scene_root
 
 func _process(delta):
 	pass
