@@ -80,6 +80,7 @@ func _load():
 		delete.append(child)
 		
 	for node in delete:
+		node.queue_free()
 		remove_child(node)
 	
 	var top_node
@@ -121,7 +122,8 @@ func _load():
 	
 	var set_roots = [top_node, collision_shape, mesh_instance]
 	for node in set_roots:
-		node.owner = get_tree().edited_scene_root
+		if node.owner:
+			node.owner = get_tree().edited_scene_root
 
 func _process(delta):
 	pass

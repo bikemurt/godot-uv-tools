@@ -59,7 +59,7 @@ func _update_size():
 func _load():
 	if not Engine.is_editor_hint(): return
 	
-	print("Loading ProtoBody")
+	print("Loading ProtoCube")
 	
 	var delete = []
 	for child in get_children():
